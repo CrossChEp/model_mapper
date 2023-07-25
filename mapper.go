@@ -1,7 +1,11 @@
 package model_mapper
 
-import "fmt"
+func Map(to interface{}, from interface{}, skipNulls bool) error {
+	if !skipNulls {
+		if err := mapWithNullFields(to, from); err != nil {
 
-func PrintHello() {
-	fmt.Printf("hello!")
+		}
+		return nil
+	}
+	return nil
 }
