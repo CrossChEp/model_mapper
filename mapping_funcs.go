@@ -27,7 +27,7 @@ func mapWithNullFields(to interface{}, from interface{}) error {
 		if reflect.TypeOf(fromValue) != reflect.TypeOf(toValue) {
 			fromValue = ""
 		}
-		if err := setField(toRefl, fieldName, fromValue); err != nil {
+		if err := SetField(toRefl, fieldName, fromValue); err != nil {
 			return err
 		}
 	}
@@ -56,14 +56,14 @@ func mapWithoutNullFields(to interface{}, from interface{}) error {
 		if fromValue == "" {
 			continue
 		}
-		if err := setField(toRefl, fieldName, fromValue); err != nil {
+		if err := SetField(toRefl, fieldName, fromValue); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func setField(structValue reflect.Value, name string, value interface{}) error {
+func SetField(structValue reflect.Value, name string, value interface{}) error {
 	structFieldValue := structValue.FieldByName(name)
 	if !structFieldValue.IsValid() {
 		return fmt.Errorf("couldn't find %s field in obj", name)
