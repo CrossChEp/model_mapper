@@ -9,3 +9,7 @@ func Map(to interface{}, from interface{}, skipNulls bool) error {
 	}
 	return mapWithoutNullFields(to, from)
 }
+
+func ConvertToJson(structure interface{}) (map[string]interface{}, error) {
+	return convertToJson(structure)
+}

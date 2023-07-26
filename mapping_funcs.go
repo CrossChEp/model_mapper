@@ -27,7 +27,7 @@ func mapWithNullFields(to interface{}, from interface{}) error {
 		if reflect.TypeOf(fromValue) != reflect.TypeOf(toValue) {
 			fromValue = ""
 		}
-		if err := SetField(toRefl, fieldName, fromValue); err != nil {
+		if err := setField(toRefl, fieldName, fromValue); err != nil {
 			return err
 		}
 	}
@@ -56,14 +56,29 @@ func mapWithoutNullFields(to interface{}, from interface{}) error {
 		if fromValue == "" {
 			continue
 		}
-		if err := SetField(toRefl, fieldName, fromValue); err != nil {
+		if err := setField(toRefl, fieldName, fromValue); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-func SetField(structValue reflect.Value, name string, value interface{}) error {
+func convertToJson(s interface{}) (map[string]interface{}, error) {
+	json := map[string]interface{}{}
+	reflectEl := reflect.ValueOf(s)
+	if reflectEl.Kind() != reflect.Ptr {
+		return nil, fmt.Errorf("you have to input only reference type values")
+	}
+	reflectEl = reflectEl.Elem()
+	for i := 0; i < reflectEl.NumField(); i++ {
+		fmt.Println(reflectEl.Type().Field(i).Name)
+		fmt.Println(reflectEl.Field(i).Interface())
+		json[reflectEl.Type().Field(i).Name] = reflectEl.Field(i).Interface()
+	}
+	return json, nil
+}
+
+func setField(structValue reflect.Value, name string, value interface{}) error {
 	structFieldValue := structValue.FieldByName(name)
 	if !structFieldValue.IsValid() {
 		return fmt.Errorf("couldn't find %s field in obj", name)
