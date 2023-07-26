@@ -71,8 +71,6 @@ func convertToJson(s interface{}) (map[string]interface{}, error) {
 	}
 	reflectEl = reflectEl.Elem()
 	for i := 0; i < reflectEl.NumField(); i++ {
-		fmt.Println(reflectEl.Type().Field(i).Name)
-		fmt.Println(reflectEl.Field(i).Interface())
 		json[reflectEl.Type().Field(i).Name] = reflectEl.Field(i).Interface()
 	}
 	return json, nil
